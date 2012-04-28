@@ -1,4 +1,4 @@
-# finagle\_json - a simple example finagle client/server using jSON
+# finagle\_json - an example messaging system using finagle 
 
 This project provides a simple example finagle system using JSON as messaging.
 Using this, clients can send json messages to the server easily and process
