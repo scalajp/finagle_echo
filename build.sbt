@@ -20,6 +20,8 @@ libraryDependencies ++= Seq(
   "org.squeryl" %% "squeryl" % "0.9.5-RC1"
 )
 
+EclipseKeys.withSource := true
+
 resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots", "releases"  at "http://oss.sonatype.org/content/repositories/releases")
 
 publishTo := Some(Resolver.file("Github Pages", Path.userHome / "git" / "kmizu.github.com" / "maven" asFile)(Patterns(true, Resolver.mavenStyleBasePattern)))
