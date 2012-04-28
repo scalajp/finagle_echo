@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy.codec
+package org.onion_lang.finagle_json.codec
 
 import java.nio.charset.Charset;
 

@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy.db
+package org.onion_lang.finagle_json.db
 import org.squeryl._
 
 /**

@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy
+package org.onion_lang.finagle_json
 
 import codec.JSONCodec
 import db.{ClientInfo, ClientInfoDbSchema}
@@ -112,7 +112,7 @@ object MessageProxyServer {
     val server: Server = ServerBuilder()
       .codec(JSONCodec)
       .bindTo(new InetSocketAddress(10000))
-      .name("message_proxy")
+      .name("finagle_json")
       .maxConcurrentRequests(1000000)
       .keepAlive(true)
       .readTimeout(1000.seconds)

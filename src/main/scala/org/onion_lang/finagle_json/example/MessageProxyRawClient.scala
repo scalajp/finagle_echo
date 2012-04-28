@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy.example
+package org.onion_lang.finagle_json.example
 
 import java.net.Socket
 import java.io.{InputStreamReader, OutputStreamWriter, PrintWriter}

@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy
+package org.onion_lang.finagle_json
 
 import codec.JSONCodec
 import com.twitter.finagle.builder.ClientBuilder

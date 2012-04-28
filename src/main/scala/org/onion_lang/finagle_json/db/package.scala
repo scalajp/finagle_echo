@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy
+package org.onion_lang.finagle_json
 
 import org.squeryl.{Session, SessionFactory}
 import org.squeryl.adapters.H2Adapter

@@ -1,4 +1,4 @@
-package org.onion_lang.message_proxy.codec
+package org.onion_lang.finagle_json.codec
 import com.twitter.finagle.{Codec, CodecFactory}
 import org.jboss.netty.util.CharsetUtil
 import net.liftweb.json.JsonAST
