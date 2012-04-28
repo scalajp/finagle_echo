@@ -1,4 +1,4 @@
-package org.onion_lang.finagle_json.codec
+package org.scala_users.jp.finagle_json.codec
 
 import java.nio.charset.Charset;
 

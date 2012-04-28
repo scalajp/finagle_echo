@@ -1,4 +1,4 @@
-package org.onion_lang.finagle_json
+package org.scala_users.jp.finagle_json
 
 import org.squeryl.{Session, SessionFactory}
 import org.squeryl.adapters.H2Adapter

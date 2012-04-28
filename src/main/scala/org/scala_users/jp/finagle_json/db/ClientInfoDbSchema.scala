@@ -1,4 +1,4 @@
-package org.onion_lang.finagle_json.db
+package org.scala_users.jp.finagle_json.db
 import org.squeryl._
 
 /**
