@@ -16,11 +16,7 @@ object MessagingClient {
       .buildFactory()
 
     def main(args: Array[String]) {
-      val jsonData = JsonParser.parse("""{"type": "heartbeat", "channel": "1", "device_id":"iPad"}""")
-      for(client <- clientFactory()) {
-        println(client(jsonData).get())
-        println(client(jsonData).get())
-      }
+      val jsonData = JsonParser.parse("""{"type": "echo", "message": "Hello"}""")
       for(client <- clientFactory()) {
         println(client(jsonData).get())
         println(client(jsonData).get())

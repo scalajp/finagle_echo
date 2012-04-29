@@ -27,58 +27,31 @@ object MessagingServer {
 
   def integer(value: JsonAST.JValue): Int = value.asInstanceOf[JInt].values.toInt
 
-  class LivingClientManagementService(clientConnection: ClientConnection) extends Service[JsonAST.JValue, JsonAST.JValue] {
+  class EchoService(clientConnection: ClientConnection) extends Service[JsonAST.JValue, JsonAST.JValue] {
     self =>
 
     def makeAck(success: Boolean): String = <t>{{ "type":"ack", "success":
       {success}
       }}</t>.text
 
-    def processHeartbeat(request: JsonAST.JValue): JsonAST.JValue = {
-      import ClientInfoDbSchema._
-      val channel = string(request \\ "channel")
-      val deviceId = string(request \\ "source_device_id")
-      val timestamp = new DateField(new Date())
-      try {
-        transaction {
-          val cls = from(clients)(c =>
-            where(c.channel === channel and c.deviceId === deviceId)
-              select (c)
-          ).toList.sortBy {
-            c => -c.timestamp.value.getTime()
-          }
-          cls match {
-            case Nil =>
-              clients.insert(new ClientInfo(timestamp, channel, deviceId))
-            case client :: rest =>
-              client.timestamp = timestamp
-              client.update
-              rest.foreach(c => clients.delete(c.id))
-          }
-          ClientInfoDbSchema.save
-        }
-        JsonParser.parse(makeAck(true))
-      } catch {
-        case e: Exception =>
-          JsonParser.parse(makeAck(false))
-      }
+    def processEcho(request: JsonAST.JValue): JsonAST.JValue = {
+      val message = string(request \\ "message")
+      JsonParser.parse(<t>{{ "type":"echoResult", "message":{message} }}</t>.text)
     }
 
     def apply(request: JsonAST.JValue): Future[JsonAST.JValue] = {
       Future.value {
         val messageType = string(request \\ "type")
-        val jsonValue = messageType match {
-          case "heartbeat" => processHeartbeat(request)
+        messageType match {
+          case "echo" => processEcho(request)
         }
-        jsonValue
       }
     }
-
   }
 
   object MessageProxyServiceFactory extends ServiceFactory[JsonAST.JValue, JsonAST.JValue] {
     def apply(conn: ClientConnection): Future[Service[JsonAST.JValue, JsonAST.JValue]] = Future.value {
-      new LivingClientManagementService(conn)
+      new EchoService(conn)
     }
 
     def close() {}
