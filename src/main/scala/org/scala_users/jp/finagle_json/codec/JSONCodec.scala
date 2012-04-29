@@ -16,12 +16,12 @@ import org.jboss.netty.channel.{ChannelHandlerContext, Channels, ChannelPipeline
 
 object JSONCodec extends JSONCodec
 
-class JSONCodec extends CodecFactory[(ChannelHandlerContext, JsonAST.JValue), JsonAST.JValue] {
+class JSONCodec extends CodecFactory[JsonAST.JValue, JsonAST.JValue] {
   def jsonDelimiter = Array[ChannelBuffer](ChannelBuffers.wrappedBuffer(Array[Byte]('\n', '\n')))
   private final val KILLO = 1024
 
   def server = Function.const {
-    new Codec[(ChannelHandlerContext, JsonAST.JValue), JsonAST.JValue] {
+    new Codec[JsonAST.JValue, JsonAST.JValue] {
       def pipelineFactory = new ChannelPipelineFactory {
         def getPipeline = {
           val pipeline = Channels.pipeline()
@@ -35,7 +35,7 @@ class JSONCodec extends CodecFactory[(ChannelHandlerContext, JsonAST.JValue), Js
   }
 
   def client = Function.const {
-    new Codec[(ChannelHandlerContext, JsonAST.JValue), JsonAST.JValue] {
+    new Codec[JsonAST.JValue, JsonAST.JValue] {
       def pipelineFactory = new ChannelPipelineFactory {
         def getPipeline = {
           val pipeline = Channels.pipeline()

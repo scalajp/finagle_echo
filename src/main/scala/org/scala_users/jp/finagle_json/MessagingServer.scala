@@ -27,30 +27,12 @@ object MessagingServer {
 
   def integer(value: JsonAST.JValue): Int = value.asInstanceOf[JInt].values.toInt
 
-  val contexts: mutable.Map[(String, String), ChannelHandlerContext] = mutable.Map()
-
-  class LivingClientManagementService(clientConnection: ClientConnection) extends Service[(ChannelHandlerContext, JsonAST.JValue), JsonAST.JValue] {
+  class LivingClientManagementService(clientConnection: ClientConnection) extends Service[JsonAST.JValue, JsonAST.JValue] {
     self =>
-    private var context: ChannelHandlerContext = null
 
     def makeAck(success: Boolean): String = <t>{{ "type":"ack", "success":
       {success}
       }}</t>.text
-
-    def processBroadcast(request: JsonAST.JValue): JsonAST.JValue = {
-      val channel = string(request \\ "channel")
-      val sourceDeviceId = string(request \\ "source_device_id")
-      val message = string(request \\ "message")
-      for ((ctx, dev) <- contexts.collect {
-        case ((ch, dev), ctx) if ch == channel => (ctx, dev)
-      }) {
-        val broadcastMessage = copiedBuffer(compact(render(request)) + "\n\n", CharsetUtil.UTF_8)
-        val channelFuture = Channels.succeededFuture(ctx.getChannel())
-        Channels.write(ctx, channelFuture, broadcastMessage)
-      }
-      val responseJson = <t>{{"type":"ack", "success":"true"}}</t>.text
-      JsonParser.parse(responseJson)
-    }
 
     def processHeartbeat(request: JsonAST.JValue): JsonAST.JValue = {
       import ClientInfoDbSchema._
@@ -68,7 +50,6 @@ object MessagingServer {
           cls match {
             case Nil =>
               clients.insert(new ClientInfo(timestamp, channel, deviceId))
-              contexts((channel, deviceId)) = context
             case client :: rest =>
               client.timestamp = timestamp
               client.update
@@ -83,37 +64,11 @@ object MessagingServer {
       }
     }
 
-    def processRequest(request: JsonAST.JValue): JsonAST.JValue = {
-      val channel = string(request \\ "channel")
-      val sourceDeviceId = string(request \\ "source_device_id")
-      val destinationDeviceId = string(request \\ "destination_device_id")
-      val message = string(request \\ "message")
-      (for (ctx <- contexts.get((channel, destinationDeviceId))) yield {
-        val msgJson = <t>{{"type":"response", "message":"
-          {message}
-          ", "channel":"
-          {channel}
-          ", "source_device_id":"
-          {sourceDeviceId}
-          ", "destination_device_id":"
-          {destinationDeviceId}
-          "}}</t>.text
-        val channelFuture = Channels.succeededFuture(ctx.getChannel())
-        Channels.write(ctx, channelFuture, copiedBuffer(msgJson + "\n\n", CharsetUtil.UTF_8))
-        JsonParser.parse(makeAck(true))
-      }).get
-    }
-
-    def apply(req: (ChannelHandlerContext, JsonAST.JValue)): Future[JsonAST.JValue] = {
-      val (ctx, request) = req
-      context = ctx
+    def apply(request: JsonAST.JValue): Future[JsonAST.JValue] = {
       Future.value {
         val messageType = string(request \\ "type")
         val jsonValue = messageType match {
-          case "response" => request
           case "heartbeat" => processHeartbeat(request)
-          case "broadcast" => processBroadcast(request)
-          case "request" => processRequest(request)
         }
         jsonValue
       }
@@ -121,8 +76,8 @@ object MessagingServer {
 
   }
 
-  object MessageProxyServiceFactory extends ServiceFactory[(ChannelHandlerContext, JsonAST.JValue), JsonAST.JValue] {
-    def apply(conn: ClientConnection): Future[Service[(ChannelHandlerContext, JValue), JsonAST.JValue]] = Future.value {
+  object MessageProxyServiceFactory extends ServiceFactory[JsonAST.JValue, JsonAST.JValue] {
+    def apply(conn: ClientConnection): Future[Service[JsonAST.JValue, JsonAST.JValue]] = Future.value {
       new LivingClientManagementService(conn)
     }
 

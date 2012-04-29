@@ -34,9 +34,6 @@ class JSONEncoder(val charset: Charset) extends OneToOneEncoder {
 
   def encode(ctx: ChannelHandlerContext, channel: Channel, msg: AnyRef) :AnyRef = {
     msg match {
-      case (_, json:JsonAST.JValue) =>
-        val buffer = copiedBuffer(compact(render(json)) + "\n\n", charset)
-        buffer
       case json:JsonAST.JValue =>
         val buffer = copiedBuffer(compact(render(json)) + "\n\n", charset)
         buffer

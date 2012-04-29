@@ -31,6 +31,6 @@ class JSONDecoder(val charset: Charset) extends OneToOneDecoder {
   def decode(ctx: ChannelHandlerContext, channel: Channel, msg: AnyRef): AnyRef = {
     if(!msg.isInstanceOf[ChannelBuffer]) return msg
     val jsonString = msg.asInstanceOf[ChannelBuffer].toString(CharsetUtil.UTF_8)
-    (ctx, JsonParser.parse(jsonString))
+    JsonParser.parse(jsonString)
   }
 }
