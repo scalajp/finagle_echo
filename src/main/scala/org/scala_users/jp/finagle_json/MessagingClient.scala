@@ -4,6 +4,7 @@ import org.scala_users.jp.finagle_json.codec.JSONCodec
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.util.TimeConversions._
 import net.liftweb.json.JsonParser
+import org.onion_lang.jsonic.Jsonic._
 
 object MessagingClient {
     val client = ClientBuilder()
@@ -16,9 +17,9 @@ object MessagingClient {
       .build()
 
     def main(args: Array[String]) {
-      val jsonData = JsonParser.parse("""{"type": "echo", "message": "Hello"}""")
-      println(client(jsonData).get())
-      println(client(jsonData).get())
+      val hello = %{ 'type :- "echo"; 'message :- "Hello" }
+      println(client(hello).get())
+      println(client(hello).get())
       client.release()
     }
 }

@@ -1,22 +1,11 @@
 package org.scala_users.jp.finagle_json
 
-import org.scala_users.jp.finagle_json.codec.JSONCodec
-import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.customtypes.DateField
-import java.util.Date
-import com.twitter.concurrent.Broker
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.conversions.time._
 import java.net.InetSocketAddress
-import org.jboss.netty.buffer.ChannelBuffer
-import org.jboss.netty.util.CharsetUtil
-import scala.collection.mutable
 import com.twitter.util.Future
 import net.liftweb.json.{JsonParser, JsonAST}
 import com.twitter.finagle.{ServiceFactory, ClientConnection, Service}
-import org.jboss.netty.channel.{Channels, ChannelHandlerContext}
-import org.jboss.netty.buffer.ChannelBuffers._
-import net.liftweb.json.Printer._
 import net.liftweb.json.JsonAST._
 import org.scala_users.jp.finagle_json.codec.JSONCodec
 
