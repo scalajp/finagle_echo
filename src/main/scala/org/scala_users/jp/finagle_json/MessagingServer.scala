@@ -1,7 +1,6 @@
 package org.scala_users.jp.finagle_json
 
 import org.scala_users.jp.finagle_json.codec.JSONCodec
-import org.scala_users.jp.finagle_json.db.{ClientInfo, ClientInfoDbSchema}
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.customtypes.DateField
 import java.util.Date
@@ -19,7 +18,6 @@ import org.jboss.netty.channel.{Channels, ChannelHandlerContext}
 import org.jboss.netty.buffer.ChannelBuffers._
 import net.liftweb.json.Printer._
 import net.liftweb.json.JsonAST._
-import org.scala_users.jp.finagle_json.db.{ClientInfo, ClientInfoDbSchema}
 import org.scala_users.jp.finagle_json.codec.JSONCodec
 
 object MessagingServer {
@@ -30,13 +28,9 @@ object MessagingServer {
   class EchoService(clientConnection: ClientConnection) extends Service[JsonAST.JValue, JsonAST.JValue] {
     self =>
 
-    def makeAck(success: Boolean): String = <t>{{ "type":"ack", "success":
-      {success}
-      }}</t>.text
-
     def processEcho(request: JsonAST.JValue): JsonAST.JValue = {
       val message = string(request \\ "message")
-      JsonParser.parse(<t>{{ "type":"echoResult", "message":{message} }}</t>.text)
+      JsonParser.parse(<t>{{ "type":"echoResult", "message":"{message}" }}</t>.text)
     }
 
     def apply(request: JsonAST.JValue): Future[JsonAST.JValue] = {
@@ -58,7 +52,6 @@ object MessagingServer {
   }
 
   def main(args: Array[String]) {
-    db.initialize()
     // Bind the service to port 10000
     val server: Server = ServerBuilder()
       .codec(JSONCodec)

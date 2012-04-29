@@ -6,21 +6,19 @@ import com.twitter.util.TimeConversions._
 import net.liftweb.json.JsonParser
 
 object MessagingClient {
-    val clientFactory = ClientBuilder()
+    val client = ClientBuilder()
       .codec(JSONCodec)
       .hosts("localhost:10000")
       .hostConnectionLimit(10000)
       .maxOutstandingConnections(10000)
       .timeout(1000.seconds)
       .tcpConnectTimeout(1000.seconds)
-      .buildFactory()
+      .build()
 
     def main(args: Array[String]) {
       val jsonData = JsonParser.parse("""{"type": "echo", "message": "Hello"}""")
-      for(client <- clientFactory()) {
-        println(client(jsonData).get())
-        println(client(jsonData).get())
-        client.release()
-      }
+      println(client(jsonData).get())
+      println(client(jsonData).get())
+      client.release()
     }
 }
