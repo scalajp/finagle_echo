@@ -22,7 +22,7 @@ import net.liftweb.json.JsonAST._
 import org.scala_users.jp.finagle_json.db.{ClientInfo, ClientInfoDbSchema}
 import org.scala_users.jp.finagle_json.codec.JSONCodec
 
-object MessageProxyServer {
+object MessagingServer {
   def string(value: JsonAST.JValue): String = value.asInstanceOf[JString].values
 
   def integer(value: JsonAST.JValue): Int = value.asInstanceOf[JInt].values.toInt

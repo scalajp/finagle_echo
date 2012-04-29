@@ -2,7 +2,7 @@ package org.scala_users.jp.finagle_json
 
 import org.scala_users.jp.finagle_json.codec.JSONCodec
 
-object MessageProxyClient {
+object MessagingClient {
   /*
     val clientFactory = ClientBuilder()
       .codec(JSONSingleCodec)
