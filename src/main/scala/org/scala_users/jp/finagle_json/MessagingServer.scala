@@ -8,6 +8,7 @@ import net.liftweb.json.{JsonParser, JsonAST}
 import com.twitter.finagle.{ServiceFactory, ClientConnection, Service}
 import net.liftweb.json.JsonAST._
 import org.scala_users.jp.finagle_json.codec.JSONCodec
+import org.onion_lang.jsonic.Jsonic._
 
 object MessagingServer {
   def string(value: JsonAST.JValue): String = value.asInstanceOf[JString].values
@@ -19,7 +20,7 @@ object MessagingServer {
 
     def processEcho(request: JsonAST.JValue): JsonAST.JValue = {
       val message = string(request \\ "message")
-      JsonParser.parse(<t>{{ "type":"echoResult", "message":"{message}" }}</t>.text)
+      %{ 'type :- "echoResult"; 'message :- message }
     }
 
     def apply(request: JsonAST.JValue): Future[JsonAST.JValue] = {
@@ -46,7 +47,7 @@ object MessagingServer {
       .codec(JSONCodec)
       .bindTo(new InetSocketAddress(10000))
       .name("finagle_json")
-      .maxConcurrentRequests(1000000)
+      .maxConcurrentRequests(10000)
       .keepAlive(true)
       .readTimeout(1000.seconds)
       .build(MessageProxyServiceFactory)
