@@ -14,8 +14,8 @@ At the first, type the following command in a console.
 
 Then, the following message should be displayed:
 
-    [1] org.scala_users.jp.finagle_json.MessagingClient
-    [2] org.scala_users.jp.finagle_json.MessagingServer
+    [1] org.scala_users.jp.finagle_echo.MessagingClient
+    [2] org.scala_users.jp.finagle_echo.MessagingServer
 
     Enter number:
 
@@ -29,8 +29,8 @@ Type the following command in another console.
 
 Then, the following message should be displayed:
 
-    [1] org.scala_users.jp.finagle_json.MessagingClient
-    [2] org.scala_users.jp.finagle_json.MessagingServer
+    [1] org.scala_users.jp.finagle_echo.MessagingClient
+    [2] org.scala_users.jp.finagle_echo.MessagingServer
 
     Enter number:
 

@@ -1,4 +1,4 @@
-package org.scala_users.jp.finagle_json
+package org.scala_users.jp.finagle_echo
 
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.conversions.time._
@@ -7,7 +7,7 @@ import com.twitter.util.Future
 import net.liftweb.json.{JsonParser, JsonAST}
 import com.twitter.finagle.{ServiceFactory, ClientConnection, Service}
 import net.liftweb.json.JsonAST._
-import org.scala_users.jp.finagle_json.codec.JSONCodec
+import org.scala_users.jp.finagle_echo.codec.JSONCodec
 import org.onion_lang.jsonic.Jsonic._
 
 object MessagingServer {
@@ -46,7 +46,7 @@ object MessagingServer {
     val server: Server = ServerBuilder()
       .codec(JSONCodec)
       .bindTo(new InetSocketAddress(10000))
-      .name("finagle_json")
+      .name("finagle_echo")
       .maxConcurrentRequests(10000)
       .keepAlive(true)
       .readTimeout(1000.seconds)

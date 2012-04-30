@@ -1,6 +1,6 @@
 organization := "org.scala_users.jp"
 
-name := "finagle_json"
+name := "finagle_echo"
 
 version := "0.0.0.0.1"
 

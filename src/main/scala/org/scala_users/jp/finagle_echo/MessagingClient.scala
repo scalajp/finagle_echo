@@ -1,6 +1,6 @@
-package org.scala_users.jp.finagle_json
+package org.scala_users.jp.finagle_echo
 
-import org.scala_users.jp.finagle_json.codec.JSONCodec
+import org.scala_users.jp.finagle_echo.codec.JSONCodec
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.util.TimeConversions._
 import org.onion_lang.jsonic.Jsonic._
